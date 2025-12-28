@@ -1,0 +1,45 @@
+1. create venv
+- Windows: python -m venv venv
+- Mac/Linux: python3 -m venv venv
+
+2. activate venv
+- Windows: .\venv\Scripts\activate
+- Mac/Linux: source venv/bin/activate
+
+3. Install Packages
+
+pip install playwright pillow
+
+playwright install
+
+# 1) Core utilities, numpy (must be <2) and scikit-learn
+pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib beautifulsoup4 lxml scikit-learn "numpy<2"
+
+# 2) (Optional) remove existing torch packages if they conflict
+pip uninstall -y torch torchvision torchaudio
+
+# 3) Install CPU-only torch wheels from PyTorch's index
+pip install --index-url https://download.pytorch.org/whl/cpu torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2
+
+# 4) Transformers + sentence-transformers (installed after torch to avoid pip pulling wrong torch)
+pip install transformers==4.41.2 sentence-transformers==2.7.0
+
+pip install pyinstaller
+
+
+
+Run Pyinstaller to get Exe:
+
+Windows: pyinstaller --onefile --add-data "resources;resources" --add-data "data;data" --icon="C:\\Users\\12173\\Desktop\\VS Code 2\\Python\\Small Projects\\TrajectTower\\resources\\logo.ico" main.py --name TrajectTower
+
+Mac/Linux: pyinstaller --onefile --add-data "resources:resources" --add-data "data:data" main.py --name TrajectTower
+
+
+--noconsole
+
+
+
+
+pyinstaller --onefile --icon="C:\\Users\\12173\\Desktop\\VS Code 2\\Python\\Small Projects\\TrajectTower\\resources\\logo.ico" test.py --name TrajectTower
+
+C:\Users\12173\AppData\Local\TrajectTower

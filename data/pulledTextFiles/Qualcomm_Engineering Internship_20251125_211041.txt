@@ -1,0 +1,303 @@
+FAQs
+Benefits
+Search for Jobs
+Skip to main content
+ Join Talent Network
+ All Jobs
+
+Qualcomm Government Technologies (QGOV) Engineering Internship – Summer 2026 (San Diego or Boulder) | US CITIZENSHIP REQUIRED
+
+San Diego, California, United States of America
+
+Apply NowAdd to Job Cart
+
+ID: 3078864
+
+Job Description
+Job Posting Date
+2025-09-23
+
+Company:
+Qualcomm Technologies, Inc.
+
+Job Area:
+Interns Group, Interns Group > Interim Engineering Intern - SW
+
+General Summary:
+
+About Qualcomm
+
+Qualcomm relentlessly innovates transforming businesses, enriching lives and fortifying societies. Our solutions are pivotal in crafting a smarter, interconnected world. Building on our nearly 40-year history of era-defining technology breakthroughs, we deliver leading-edge AI, high performance, lower-power computing, and unrivaled connectivity. We’re proud to be the partner of choice to many of the world’s largest enterprises. Together with our ecosystem partners, we enable next-generation digital transformation. At Qualcomm, we are engineering human progress.
+
+Join Us in Shaping the Future
+
+At Qualcomm, we're committed to engineering human progress by delivering intelligent computing everywhere. We're passionate about harnessing the power of technology to transform industries and improve lives. Our early career programs offer limitless opportunities for growth, mentorship, and meaningful work. By joining our team, you'll be part of a community that's pushing the boundaries of what's possible in AI, computing, and connectivity. With a global footprint spanning over 30 countries, you'll have the chance to collaborate with diverse talent and contribute to projects that are shaping the future of technology.
+
+Our early career programs are designed to attract inventive minds, offering a platform to contribute to our long-term innovation pipeline. You'll be part of a community that values collaboration, creativity, and continuous learning. Our programs provide real-world experience, technical skills, and professional development opportunities, empowering you to make a meaningful impact and achieve your career goals. Join us for our U.S. 2026 summer intern class!
+
+Role Overview
+
+Qualcomm's Government Technologies (QGOV) division develops special products based on its wireless terrestrial and satellite communication technologies for the military, federal, local, and foreign governments. As a QGOV Engineering Intern, you will sit in either San Diego, CA or Boulder, CO and support government-sponsored research, development, integration, and testing of such systems, including adaptation and extension of commercial systems to novel applications and environments, as well as internal development efforts. You will work on a variety of projects crossing multiple disciplines from across the company to deliver timely results to customers. You will be responsible for working closely with other engineering disciplines to design, develop, automate, document, and execute tests. Excellent written and verbal communication skills are essential. Interns must be willing to travel occasionally and work well with others in a technical, global environment.
+
+This internship supports multiple technical tracks, including:
+
+Embedded Software
+
+Software in Test
+
+Based on your resume you may be aligned to one or more of these tracks. Please clearly indicate your interest(s) in your resume, as this is the only way to communicate preferences during the recruiting process.
+
+Minimum Qualifications
+
+Must be a U.S. citizen
+
+Currently enrolled in a bachelor’s degree program in computer engineering, computer science, electrical engineering, or a related field
+
+Must be available for 11–14 weeks during Summer 2026 (May–September)
+
+Expected graduation date of November 2026 or later
+
+1+ years of experience with programming languages such as C, C++, Java, Python, etc.
+
+Preferred Qualifications
+
+Candidates actively pursuing a degree with an anticipated graduation between December 2026 and June 2027
+
+Track 1: Embedded Software
+
+Experience with real-time embedded software development
+
+Experience with cellular systems, including devices and applications for voice and data, and associated test equipment and tools
+
+Understanding of communications systems including both physical and upper layers
+
+Familiarity with development tools such as Git and Gerrit
+
+Familiarity with debugging tools such as JTAG, IDEs, and gdb
+
+Experience with digital signal processing
+
+Experience with software vulnerability analysis and tools such as IDA Pro
+
+Track 2: Software in Test
+
+Test automation framework design and development using Python
+
+Test design, development, automation, execution, documentation, and debug
+
+Experience with cellular systems and associated test equipment and tools
+
+Understanding of communications systems including both physical and upper layers
+
+Experience evaluating wireless communications systems through drive tests, logging, and post analysis
+
+Familiarity with application layer protocols (TCP/IP, UDP, ICMP) and network/socket communications
+
+Experience with mobile platform operating systems including Linux, Android, and iOS
+
+Familiarity with Linux, Git, Jenkins, Testlink, and Docker
+
+Qualcomm’s Internship Program
+
+Our interns join world-class teams to help define and build what is next for mobility and the world. You’ll be paired with a mentor with visibility to your project and team, receive support from your manager, and have access to the entire Qualcomm employee community to ensure your success. To round out your summer internship, we host professional development workshops, social events, cross-functional speaker sessions, and an executive speaker series. In addition to competitive hourly pay and accrued vacation time, you will receive relocation coverage and furnished housing accommodations for the duration of your internship.
+
+Application Process
+
+By applying here, you are expressing interest in one of our many 2026 QGOV Engineering internships. It is important to note that this is not a job posting for a specific project. We will review resumes on an ongoing basis, and a recruiter may reach out to you. Advancing candidates may be invited to complete a timed HackerRank challenge to evaluate their technical skill set.
+
+Applicants: Qualcomm is an equal opportunity employer. If you are an individual with a disability and need an accommodation during the application/hiring process, rest assured that Qualcomm is committed to providing an accessible process. You may e-mail disability-accomodations@qualcomm.com or call Qualcomm's toll-free number found here. Upon request, Qualcomm will provide reasonable accommodations to support individuals with disabilities to be able participate in the hiring process. Qualcomm is also committed to making our workplace accessible for individuals with disabilities. (Keep in mind that this email address is used to provide reasonable accommodations for individuals with disabilities. We will not respond here to requests for updates on applications or resume inquiries).
+
+To all Staffing and Recruiting Agencies: Our Careers Site is only for individuals seeking a job at Qualcomm. Staffing and recruiting agencies and individuals being represented by an agency are not authorized to use this site or to submit profiles, applications or resumes, and any such submissions will be considered unsolicited. Qualcomm does not accept unsolicited resumes or applications from agencies. Please do not forward resumes to our jobs alias, Qualcomm employees or any other company location. Qualcomm is not responsible for any fees related to unsolicited resumes/applications.
+
+EEO Employer: Qualcomm is an equal opportunity employer; all qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability, Veteran status, or any other protected classification.
+
+Qualcomm expects its employees to abide by all applicable policies and procedures, including but not limited to security and other requirements regarding protection of Company confidential information and other confidential and/or proprietary information, to the extent those requirements are permissible under applicable law.
+
+ 
+
+Pay range and Other Compensation & Benefits:
+
+$17.00 - $98.00
+
+The above pay scale reflects the broad, minimum to maximum, pay scale for this job code for the location for which it has been posted. Even more importantly, please note that salary is only one component of total compensation at Qualcomm.  We also offer a competitive annual discretionary bonus program and opportunity for annual RSU grants (employees on sales-incentive plans are not eligible for our annual bonus).  In addition, our highly competitive benefits package is designed to support your success at work, at home, and at play. Your recruiter will be happy to discuss all that Qualcomm has to offer – and you can review more details about our US benefits at this link.
+
+If you would like more information about this role, please contact Qualcomm Careers.
+
+Job Application Privacy Notice
+
+Job Application Privacy Notice
+
+Use of AI in the Application Process
+
+Use of AI in the Application Process
+
+Equal Employment Opportunity
+
+Equal Employment Opportunity
+
+"EEO is the Law" Poster Supplement
+
+Pay Transparency Non-Discrimination Provision
+
+Employee Polygraph Protection Act
+
+Family Medical Leave Act
+
+Rights of Pregnant Employees
+
+Discrimination and Harassment
+
+California Family Rights Act
+
+Qualcomm Right to Inspect
+
+Get Matched
+Upload Your Resume And See Jobs That Match Your Skills And Experience
+Upload Your Resume
+Match Unknown
+Job Insights
+
+Based On Previously Hired Candidates
+
+Popular Skills Of Previous Hires
+Algorithms
+Assembly Language
+Artificial Intelligence
+Years Of Experience Of Previous Hires
+<2 - 50%
+2-4 - 25%
+4-8 - 17%
+8+ - 8%
+Job Titles Of Previous Hires
+
+Engineering
+
+Qualcomm Government Technologies (Qgov) Engineering Internship – Summer 2026 (San Diego or Boulder) | US Citizenship Required
+
+Engineering Team
+
+Engineering Group
+
+Intel Corporation
+
+Previous Hires Also Worked At
+
+University of Toronto Aerospace Team
+
+University of Illinois at Urbana Champaign
+
+Other Similar Jobs
+Embedded Engineering Internship - Summer 2026
+
+San Diego, California, United States of America and 2 more
+
+Interim Engineering Intern - SW
+Hardware (CPU, GPU, SoC, Digital Design, DV) Engineering Internship – Summer 2026
+
+San Diego, California, United States of America and 4 more
+
+Interim Engineering Intern - HW
+Automotive Engineering Internship – Summer 2026
+
+San Diego, California, United States of America
+
+Interim Engineering Intern - SW
+Wireless Systems Engineering Internship - Summer 2026
+
+San Diego, California, United States of America and 3 more
+
+Interim Engineering Intern - Systems
+Multimedia Engineering Internship – Summer 2026
+
+San Diego, California, United States of America and 1 more
+
+Interim Engineering Intern - Systems
+RF/Analog Design/Mixed-Signal Engineering Internship – Summer 2026
+
+San Diego, California, United States of America and 4 more
+
+Interim Engineering Intern - HW
+Security (Product, Systems, Cyber) Engineering Internship - Summer 2026
+
+San Diego, California, United States of America
+
+Interim Engineering Intern - SW
+Software Engineering Internship - Summer 2026
+
+San Diego, California, United States of America and 9 more
+
+Interim Engineering Intern - SW
+HW SOC/ASIC Physical Design Engineer, Senior (US Citizenship Required)
+
+San Diego, California, United States of America
+
+ASICS Engineering
+Slide 1 of 3
+Recommended Videos For You
+At Qualcomm, Career Opportunities Are Limitless
+
+At Qualcomm, opportunities for our employees are limitless. They turn challenges into technological breakthroughs with their inventiveness, passion, a...
+
+Go To The Edge Of Possible With Qualcomm On-Device AI
+
+Learn more about Edge of Possible: https://www.qualcomm.com/edgeofpossible Qualcomm on-device AI brings intelligent computing everywhere. See how Qua...
+
+Qualcomm AI Research: Passionate Execution
+
+Qualcomm keeps our AI research philosophy simple: we bring the best AI researchers and AI engineers together to collaborate on AI innovation and solve...
+
+Qualcomm AI Research: Purposeful Innovation
+
+Qualcomm has spent the past decade conducting AI research to make AI more power-efficient and ubiquitous across industries. Power efficiency is impera...
+
+Slide 1 of 4
+Recommended Articles For You
+
+ 
+
+Why Qualcomm Is The True Leader In 5G – A Story Of Found...
+Qualcomm's foundational inventions have been at the center of the 3G and 4G standards, and now form th...
+
+ 
+
+Meet Vanitha Kumar, The Qualcomm Inventor Whose Work ...
+Q&A with Qualcomm Senior Vice President Vanitha Kumar about working on LTE, how SW air interface ...
+
+ 
+
+Snapdragon Compute Platforms Are Leading The Way For Mo...
+Our teams have been working closely with school leaders across the country, discussing accessible an...
+Slide 1 of 1
+Perks And Benefits
+Health
+
+Qualcomm offers a world-class health benefit option providing world-class coverage to employees and their eligible dependents.
+
+Wealth
+
+Our programs are designed to help employees build and prepare for a financially secure future.
+
+Self
+
+Our self and family resources help you build emotional/mental strength and resilience, as well as define your purpose — in life and at work.
+
+Wellbeing
+
+Qualcomm’s wellbeing programs and resources offer support to help employees Live+Well and Work+Well, so they can unlock their full potential at home, at work, and everywhere between.
+
+Unlock Your Limitless Potential With Qualcomm
+
+Whether you’re launching a new career or ready to explore what’s next in the evolution of your talent and expertise, you’re about to embark on a career growth journey like no other.
+
+Bring out your best, with the best
+Our employees make Qualcomm’s success possible. We hire the brightest minds and foster a supportive, inclusive culture where your ideas have the power to contribute to world-changing innovations and breakthrough technologies. To make that possible, we leverage the breadth and depth of our diverse expertise from around the world to answer the unasked, conquer the complex, and solve some of the biggest challenges only we can – together.
+
+Innovate with technology experts
+At Qualcomm, we are passionate about the limitless potential of your career. Only here can you work alongside some of the most respected, leading engineering and technology experts in the industry – helping you learn and grow professionally in ways you haven’t yet imagined.
+
+Live well, work well
+Additionally, you’ll have access to programs such as our continuous learning and development programs, tuition reimbursement, and mentorships to tap into your limitless potential – plus, opportunities to enhance your quality of life through our comprehensive, best-in-class benefits offerings.
+
+The work we do at Qualcomm impacts lives around the globe – and you can be part of it. Apply today and unlock your full potential.
+
+Powered by   eightfold.ai #WhatsNextForYou

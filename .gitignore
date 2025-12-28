@@ -1,0 +1,13 @@
+# Files
+TrajectTower.spec
+notes.txt
+
+# gmail files
+credentials.json
+token.json
+
+# Folders
+__pycache__/
+venv/
+build/
+/dist
