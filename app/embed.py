@@ -3,67 +3,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import json
 from bs4 import BeautifulSoup
 import os
-import sys
-import shutil
 
-def get_resource_path(relative_path):
-    """Get absolute path to bundled resource (works for dev and PyInstaller)"""
-    try:
-        # PyInstaller extracts files to a temp folder
-        base_path = sys._MEIPASS
-    except AttributeError:
-        # Normal Python script
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
-
-def get_data_path(filename=""):
-    """Return a writable path for storing user data."""
-
-    applicationName = "TrajectTower"
-
-    # “Elevate Your Career, One Step at a Time.”
-
-    if sys.platform == "win32":
-        base = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), applicationName)
-    elif sys.platform == "darwin":
-        base = os.path.expanduser("~/Library/Application Support/" + applicationName)
-    else:
-        base = os.path.expanduser("~/.local/share/" + applicationName)
-
-    os.makedirs(base, exist_ok=True)
-    return os.path.join(base, filename)
-
-
-def get_copied_data_file_path(filename):
-    """
-    If the file doesn't exist in the user's data folder, copy it from bundled resources.
-    Returns the full path to the writable file.
-    """
-    user_file_path = get_data_path(filename)
-
-    if not os.path.exists(user_file_path):
-        # Ensure all parent directories exist
-        os.makedirs(os.path.dirname(user_file_path), exist_ok=True)
-        
-        bundled_file_path = get_resource_path(filename)
-        if os.path.exists(bundled_file_path):
-            shutil.copy(bundled_file_path, user_file_path)
-
-    # Optional: validate file
-    if not is_valid_data_file_path(filename):
-        raise IOError(f"Cannot access or write to {user_file_path}")
-
-    return user_file_path
-
-def is_valid_data_file_path(filename):
-    """
-    Check if a file is a valid data file.
-    Returns True if the file exists and is writable, False otherwise.
-    """
-    path = get_data_path(filename)
-    return os.path.isfile(path) and os.access(path, os.W_OK)
-
+from app.paths import get_data_path
 
 
 jobsDataJsonFilePath = get_data_path("data/jobs_data.json")

@@ -1,4 +1,10 @@
-from playwright.sync_api import sync_playwright
+import os
+
+from app.paths import get_browsers_path
+
+browsers_path = get_browsers_path()
+os.environ["PLAYWRIGHT_BROWSERS_PATH"] = browsers_path
+from playwright.sync_api import sync_playwright, Error
 
 
 def scrapeTextFromUrl(url, update_status):

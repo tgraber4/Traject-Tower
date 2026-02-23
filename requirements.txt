@@ -28,18 +28,6 @@ pip install pyinstaller
 
 
 
-Run Pyinstaller to get Exe:
-
-Windows: pyinstaller --onefile --add-data "resources;resources" --add-data "data;data" --icon="C:\\Users\\12173\\Desktop\\VS Code 2\\Python\\Small Projects\\TrajectTower\\resources\\logo.ico" main.py --name TrajectTower
-
-Mac/Linux: pyinstaller --onefile --add-data "resources:resources" --add-data "data:data" main.py --name TrajectTower
-
-
---noconsole
 
 
 
-
-pyinstaller --onefile --icon="C:\\Users\\12173\\Desktop\\VS Code 2\\Python\\Small Projects\\TrajectTower\\resources\\logo.ico" test.py --name TrajectTower
-
-C:\Users\12173\AppData\Local\TrajectTower

@@ -2,76 +2,15 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 import os
-import sys
 import json
 import threading
 from PIL import Image, ImageTk
 import threading
-import shutil
-
 
 from app.emails.gmail import checkGmailConnection, setupGmailConnection, getGmailEmails
 from app.embed import runEmbeddings
 from app.parse import scrapeTextFromUrl
-
-
-def get_resource_path(relative_path):
-    """Get absolute path to bundled resource (works for dev and PyInstaller)"""
-    try:
-        # PyInstaller extracts files to a temp folder
-        base_path = sys._MEIPASS
-    except AttributeError:
-        # Normal Python script
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
-
-def get_data_path(filename=""):
-    """Return a writable path for storing user data."""
-
-    applicationName = "TrajectTower"
-
-    # “Elevate Your Career, One Step at a Time.”
-
-    if sys.platform == "win32":
-        base = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), applicationName)
-    elif sys.platform == "darwin":
-        base = os.path.expanduser("~/Library/Application Support/" + applicationName)
-    else:
-        base = os.path.expanduser("~/.local/share/" + applicationName)
-
-    os.makedirs(base, exist_ok=True)
-    return os.path.join(base, filename)
-
-
-def get_copied_data_file_path(filename):
-    """
-    If the file doesn't exist in the user's data folder, copy it from bundled resources.
-    Returns the full path to the writable file.
-    """
-    user_file_path = get_data_path(filename)
-
-    if not os.path.exists(user_file_path):
-        # Ensure all parent directories exist
-        os.makedirs(os.path.dirname(user_file_path), exist_ok=True)
-        
-        bundled_file_path = get_resource_path(filename)
-        if os.path.exists(bundled_file_path):
-            shutil.copy(bundled_file_path, user_file_path)
-
-    # Optional: validate file
-    if not is_valid_data_file_path(filename):
-        raise IOError(f"Cannot access or write to {user_file_path}")
-
-    return user_file_path
-
-def is_valid_data_file_path(filename):
-    """
-    Check if a file is a valid data file.
-    Returns True if the file exists and is writable, False otherwise.
-    """
-    path = get_data_path(filename)
-    return os.path.isfile(path) and os.access(path, os.W_OK)
+from app.paths import get_resource_path, get_data_path, is_valid_data_file_path, get_browsers_path
 
 
 class CustomDropdown:
@@ -464,6 +403,9 @@ class JobTrackerApp:
         self.root.title("Job Application Tracker")
         self.root.geometry("900x700")
         self.root.configure(bg="#1a1a1a")
+
+        icon = tk.PhotoImage(file=get_resource_path("resources/logo.png"))
+        root.iconphoto(True, icon)
         
         # Store job data
         self.jobs = []
@@ -1191,6 +1133,8 @@ class UpdateJobStatusesWindow:
         elif self.connected:
             if provider == "Gmail":
                 self.emails = getGmailEmails() 
+                print("Emails: ")
+                print(self.emails)
                 self.enable_embed_button()
                 self.embedBtn.config(bg="#3498db", fg="white")
             elif provider == "iCloud":
@@ -1301,138 +1245,21 @@ class CustomMessageBox:
         self.win.geometry(f"+{x}+{y}")
 
 
-import os
-import sys
-import subprocess
-import tkinter as tk
-from tkinter import messagebox
-
-def isExeEnv():
-    return getattr(sys, "frozen", False)
-
-def get_browsers_path():
-    """
-    Return a persistent folder path for Playwright browsers.
-    Works in dev and PyInstaller onefile builds.
-    """
-    if isExeEnv():
-        # Running inside PyInstaller onefile or onedir exe
-        # Persistent folder outside the temp _MEIxxxx folder
-        if sys.platform == "win32":
-            path = os.path.join(os.environ["LOCALAPPDATA"], "TrajectTower", "ms-playwright")
-        elif sys.platform == "darwin":
-            path = os.path.expanduser("~/Library/Caches/TrajectTower/ms-playwright")
-        else:
-            path = os.path.expanduser("~/.cache/TrajectTower/ms-playwright")
-    else:
-        # Dev / venv environment
-        # Use default Playwright cache or a subfolder in the project
-        if sys.platform == "win32":
-            path = os.path.join(os.environ["LOCALAPPDATA"], "ms-playwright")
-        elif sys.platform == "darwin":
-            path = os.path.expanduser("~/Library/Caches/ms-playwright")
-        else:
-            path = os.path.expanduser("~/.cache/ms-playwright")
-
-    os.makedirs(path, exist_ok=True)
-    return path
-
 def is_playwright_setup_needed():
     """Return True if browsers folder is missing or empty."""
     path = get_browsers_path()
     return not os.listdir(path)
 
-def install_playwright_browsers():
-    """Force install Chromium, Firefox, WebKit to persistent folder."""
-    path = get_browsers_path()
-    os.environ["PLAYWRIGHT_BROWSERS_PATH"] = path
 
-    # Use system Python to avoid PyInstaller onefile temp folder issues
-    if isExeEnv():
-        # Running as PyInstaller EXE → use system Python
-        python_exe = subprocess.check_output(
-            ["where", "python"], text=True
-        ).splitlines()[0]
-    else:
-        # Dev / venv
-        python_exe = sys.executable
-
-    try:
-        subprocess.run(
-            [python_exe, "-m", "playwright", "install", "--force", "chromium", "firefox", "webkit"],
-            check=True
-        )
-        messagebox.showinfo("Success", f"Playwright browsers installed successfully!\nFolder: {path}")
-    except subprocess.CalledProcessError:
-        messagebox.showerror("Error", "Failed to install Playwright browsers.\nCheck your internet connection.")
-
-class Setup:
-    def __init__(self, root, launch_main_app_callback):
-        self.root = root
-        self.launch_main_app_callback = launch_main_app_callback
-        self.root.title("TrajectTower Playwright Setup")
-        self.root.geometry("450x250")
-        self.root.resizable(False, False)
-
-        self.browsers_path = get_browsers_path()
-        print(self.browsers_path)
-        os.environ["PLAYWRIGHT_BROWSERS_PATH"] = self.browsers_path
-
-        label = tk.Label(
-            self.root,
-            text="This setup will check if Playwright browsers are installed.\n"
-                 "Internet is required to download them if missing.",
-            wraplength=420,
-            justify="center"
-        )
-        label.pack(pady=20)
-
-        tk.Button(self.root, text="Check / Install Playwright", command=self.check_playwright).pack(pady=10)
-        tk.Button(self.root, text="Test Browser Launch", command=self.launch_browser_test).pack(pady=10)
-        tk.Button(self.root, text="Finish Setup", command=self.finish_setup).pack(pady=10)
-
-    def check_playwright(self):
-        if is_playwright_setup_needed():
-            result = messagebox.askyesno(
-                "Playwright Setup",
-                "Playwright browsers are missing or incomplete.\n"
-                "Internet is required to download them.\nDo you want to install now?"
-            )
-            if result:
-                install_playwright_browsers()
-        else:
-            messagebox.showinfo("Playwright Setup", f"Browsers already installed at:\n{self.browsers_path}")
-
-    def launch_browser_test(self):
-        try:
-            # Import here to ensure PLAYWRIGHT_BROWSERS_PATH is set
-            from playwright.sync_api import sync_playwright, Error
-            os.environ["PLAYWRIGHT_BROWSERS_PATH"] = self.browsers_path
-
-            with sync_playwright() as p:
-                browser = p.chromium.launch(headless=True)
-                browser.close()
-            messagebox.showinfo("Test Success", "Chromium launched successfully!")
-        except Exception as e:
-            messagebox.showerror("Playwright Error", f"Failed to launch browser:\n{e}")
-
-    def finish_setup(self):
-        self.root.destroy()
-        if callable(self.launch_main_app_callback):
-            self.launch_main_app_callback()
-
-# Example usage
 def launch_job_tracker_app():
     root = tk.Tk()
-    app2 = JobTrackerApp(root)  # replace with your actual main app class
+    app2 = JobTrackerApp(root) 
     root.mainloop()
 
 
 if __name__ == "__main__":
     if is_playwright_setup_needed():
-        root = tk.Tk()
-        setup_app = Setup(root, launch_job_tracker_app)
-        root.mainloop()
+        messagebox.showerror("Playwright Error", "Playwright setup needed. Follow instructions on Github for setting up Playwright.")
     else:
         launch_job_tracker_app()
 
