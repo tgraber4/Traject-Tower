@@ -316,7 +316,7 @@ class AddJobDialog:
 
             self.pull_btn.config(state='normal', text='Pull Text Again')
             
-            updateTextFile(filepath)
+            updateTextFile(filename)
 
             afterFunc()
         
@@ -595,7 +595,8 @@ class JobTrackerApp:
     
     def show_pulled_text(self, job):
         """Display the pulled text in a new window"""
-        if not job.get('text_file') or not is_valid_data_file_path(job['text_file']):
+        filepath = get_data_path(os.path.join("data/pulledTextFiles", job['text_file']))
+        if not job.get('text_file') or not is_valid_data_file_path(filepath):
             messagebox.showerror("Error", "Text file not found!")
             return
         
@@ -660,8 +661,8 @@ class JobTrackerApp:
         
         # Load and display text
         try:
-            if is_valid_data_file_path(job['text_file']):
-                with open(job['text_file'], 'r', encoding='utf-8') as f:
+            if is_valid_data_file_path(filepath):
+                with open(filepath, 'r', encoding='utf-8') as f:
                     content = f.read()
                     text_widget.insert('1.0', content)
                     text_widget.config(state='disabled')  # Make read-only
