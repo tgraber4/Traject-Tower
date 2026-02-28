@@ -1,5 +1,3 @@
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 import json
 from bs4 import BeautifulSoup
 import os
@@ -99,6 +97,8 @@ def emailContainedInLog(emailSubject, emailDate):
 # ---- Embedding ----
 
 def runEmbeddings(emailList):
+    from sentence_transformers import SentenceTransformer
+    from sklearn.metrics.pairwise import cosine_similarity
     # Load embedding model
     model = SentenceTransformer("all-MiniLM-L6-v2")
 

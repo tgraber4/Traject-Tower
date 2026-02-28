@@ -1,11 +1,11 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from datetime import datetime
 import os
 import json
 import threading
+import shutil
 from PIL import Image, ImageTk
-import threading
 
 from app.emails.gmail import checkGmailConnection, setupGmailConnection, getGmailEmails
 from app.embed import runEmbeddings
@@ -124,7 +124,7 @@ class CustomDropdown:
 
 class AddJobDialog:
     def __init__(self, parent, on_save, parse_callback=None, card_bg="#2b2b2b", 
-                 text_primary="#ffffff", entry_bg="#3d3d3d", button_primary="#3498db",
+                 text_primary="#ffffff", text_secondary="#a0a0a0", entry_bg="#3d3d3d", button_primary="#3498db",
                  button_primary_active="#2980b9", button_success="#27ae60", 
                  button_success_active="#229954", button_secondary="#95a5a6",
                  button_secondary_active="#7f8c8d"):
@@ -135,6 +135,7 @@ class AddJobDialog:
         # Styling parameters
         self.card_bg = card_bg
         self.text_primary = text_primary
+        self.text_secondary = text_secondary
         self.entry_bg = entry_bg
         self.button_primary = button_primary
         self.button_primary_active = button_primary_active
@@ -152,6 +153,7 @@ class AddJobDialog:
 
         self.mode = tk.StringVar(value="parse")
         self.text_file = None
+        self.image_file = None
 
         self.build_ui()
 
@@ -182,7 +184,16 @@ class AddJobDialog:
             activebackground=self.button_secondary_active,
             relief=tk.FLAT, cursor="hand2", padx=15, pady=5
         )
-        self.paste_btn.pack(side=tk.LEFT)
+        self.paste_btn.pack(side=tk.LEFT, padx=(0, 10))
+
+        self.image_btn = tk.Button(
+            mode_frame, text="🖼️ Insert Image",
+            command=lambda: self.set_mode("image"),
+            bg=self.button_secondary, fg="white",
+            activebackground=self.button_secondary_active,
+            relief=tk.FLAT, cursor="hand2", padx=15, pady=5
+        )
+        self.image_btn.pack(side=tk.LEFT)
 
         # Company
         tk.Label(frame, text="Company *", bg=self.card_bg, 
@@ -237,8 +248,6 @@ class AddJobDialog:
         )
         self.status_label.pack(fill=tk.X, pady=(5, 0))
 
-        self.url_frame.pack(fill=tk.BOTH, expand=True)
-
         # Manual text section
         self.manual_frame = tk.Frame(content_container, bg=self.card_bg)
 
@@ -248,6 +257,21 @@ class AddJobDialog:
                                    bg=self.entry_bg, fg=self.text_primary,
                                    insertbackground=self.text_primary, relief=tk.FLAT)
         self.manual_text.pack(fill=tk.BOTH, expand=True)
+
+        # Image selection section
+        self.image_frame = tk.Frame(content_container, bg=self.card_bg)
+        tk.Label(self.image_frame, text="Select Job Screenshot", bg=self.card_bg,
+                fg=self.text_primary, font=("Arial", 10, "bold")).pack(anchor="w")
+        
+        self.image_path_label = tk.Label(self.image_frame, text="No image selected", 
+                                        bg=self.card_bg, fg=self.text_secondary, 
+                                        font=("Arial", 9), wraplength=500, justify="left")
+        self.image_path_label.pack(fill=tk.X, pady=(5, 5))
+
+        tk.Button(self.image_frame, text="Choose Image...", command=self.select_image,
+                 bg=self.button_primary, fg="white", 
+                 activebackground=self.button_primary_active,
+                 relief=tk.FLAT, cursor="hand2", padx=15, pady=5).pack(anchor="w")
 
         # Spacer to push buttons to bottom
         spacer = tk.Frame(frame, bg=self.card_bg)
@@ -266,28 +290,33 @@ class AddJobDialog:
                  activebackground=self.button_secondary_active,
                  relief=tk.FLAT, cursor="hand2", padx=30, pady=8).pack(side=tk.RIGHT)
 
+        self.set_mode("parse")
+
     # ------------------------
     # Mode switching
     # ------------------------
     def set_mode(self, mode):
         self.mode.set(mode)
 
+        # Reset all button colors
+        self.parse_btn.config(bg=self.button_secondary, activebackground=self.button_secondary_active)
+        self.paste_btn.config(bg=self.button_secondary, activebackground=self.button_secondary_active)
+        self.image_btn.config(bg=self.button_secondary, activebackground=self.button_secondary_active)
+        
+        # Hide all frames
+        self.url_frame.pack_forget()
+        self.manual_frame.pack_forget()
+        self.image_frame.pack_forget()
+
         if mode == "parse":
-            # Update button colors
             self.parse_btn.config(bg=self.button_primary, activebackground=self.button_primary_active)
-            self.paste_btn.config(bg=self.button_secondary, activebackground=self.button_secondary_active)
-            
-            # Switch frames
-            self.manual_frame.pack_forget()
             self.url_frame.pack(fill=tk.BOTH, expand=True)
-        else:
-            # Update button colors
-            self.parse_btn.config(bg=self.button_secondary, activebackground=self.button_secondary_active)
+        elif mode == "paste":
             self.paste_btn.config(bg=self.button_primary, activebackground=self.button_primary_active)
-            
-            # Switch frames
-            self.url_frame.pack_forget()
             self.manual_frame.pack(fill=tk.BOTH, expand=True)
+        elif mode == "image":
+            self.image_btn.config(bg=self.button_primary, activebackground=self.button_primary_active)
+            self.image_frame.pack(fill=tk.BOTH, expand=True)
 
     # ------------------------
     # URL Parsing
@@ -298,6 +327,15 @@ class AddJobDialog:
 
     def updateTextFile(self, newTextFile):
         self.text_file = newTextFile
+
+    def select_image(self):
+        file_path = filedialog.askopenfilename(
+            title="Select Job Screenshot",
+            filetypes=[("Image files", "*.png *.jpg *.jpeg *.gif *.bmp")]
+        )
+        if file_path:
+            self.image_file = file_path
+            self.image_path_label.config(text=os.path.basename(file_path))
 
     def pullFromUrlThread(self, url, company, title, scrapeTextFromUrl, update_status, updateTextFile, afterFunc):
         text_content = scrapeTextFromUrl(url, update_status)
@@ -365,6 +403,7 @@ class AddJobDialog:
             return
 
         text_file = self.text_file
+        image_file_name = None
 
         if self.mode.get() == "paste":
             content = self.manual_text.get("1.0", tk.END).strip()
@@ -378,10 +417,28 @@ class AddJobDialog:
             safe_title = "".join(c for c in self.title if c.isalnum() or c in " -_")
 
             filename = f"{safe_company}_{safe_title}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-            text_file = get_data_path(os.path.join("data/pulledTextFiles", filename))
+            filepath = get_data_path(os.path.join("data/pulledTextFiles", filename))
 
-            with open(text_file, "w", encoding="utf-8") as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(content)
+            
+            text_file = filename
+        
+        elif self.mode.get() == "image":
+            if not self.image_file:
+                messagebox.showwarning("Missing Image", "Please select an image.")
+                return
+            
+            os.makedirs(get_data_path("data/jobImages"), exist_ok=True)
+            
+            safe_company = "".join(c for c in self.company if c.isalnum() or c in " -_")
+            safe_title = "".join(c for c in self.title if c.isalnum() or c in " -_")
+            ext = os.path.splitext(self.image_file)[1]
+            image_file_name = f"{safe_company}_{safe_title}_{datetime.now().strftime('%Y%m%d_%H%M%S')}{ext}"
+            image_dest = get_data_path(os.path.join("data/jobImages", image_file_name))
+            
+            shutil.move(self.image_file, image_dest)
+            text_file = None
 
         job = {
             "company": self.company,
@@ -389,6 +446,7 @@ class AddJobDialog:
             "date": datetime.now().strftime("%Y-%m-%d"),
             "status": "Applied",
             "text_file": text_file,
+            "imageFile": image_file_name,
             "url": self.url_entry.get().strip() if self.mode.get() == "parse" else None
         }
 
@@ -401,7 +459,7 @@ class JobTrackerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Job Application Tracker")
-        self.root.geometry("900x700")
+        self.root.geometry("975x700")
         self.root.configure(bg="#1a1a1a")
 
         icon = tk.PhotoImage(file=get_resource_path("resources/logo.png"))
@@ -410,6 +468,8 @@ class JobTrackerApp:
         # Store job data
         self.jobs = []
         self.filtered_jobs = []
+        self.search_timer = None
+        self.status_filter_var = tk.StringVar(value="All Statuses")
         
         # Status colors
         self.status_colors = {
@@ -427,6 +487,7 @@ class JobTrackerApp:
         
         # Create folders
         os.makedirs(get_data_path("data/pulledTextFiles"), exist_ok=True)
+        os.makedirs(get_data_path("data/jobImages"), exist_ok=True)
         if not os.path.exists(get_resource_path("resources")):
             os.makedirs(get_resource_path("resources"))
         if not os.path.exists(get_resource_path("resources/Images")):
@@ -443,6 +504,15 @@ class JobTrackerApp:
         top_frame.pack(fill=tk.X, padx=0, pady=0)
         top_frame.pack_propagate(False)
         
+        # Job count display frame
+        self.stats_frame = tk.Frame(self.root, bg=self.bg_dark)
+        self.stats_frame.pack(fill=tk.X, padx=20, pady=(10, 0))
+        
+        self.job_count_label = tk.Label(self.stats_frame, text="Total Jobs: 0", 
+                                       bg=self.bg_dark, fg=self.text_secondary, 
+                                       font=("Arial", 10, "bold"))
+        self.job_count_label.pack(side=tk.LEFT)
+        
         # Search bar
         search_frame = tk.Frame(top_frame, bg="#242424")
         search_frame.pack(side=tk.LEFT, padx=20, pady=10, fill=tk.X, expand=True)
@@ -457,6 +527,20 @@ class JobTrackerApp:
                                fg="#e0e0e0", insertbackground="#e0e0e0",
                                relief=tk.FLAT, borderwidth=2)
         search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        # Status Filter Dropdown
+        tk.Label(search_frame, text="Status:", bg="#242424", fg="#e0e0e0", 
+                font=("Arial", 10)).pack(side=tk.LEFT, padx=(15, 10))
+        
+        status_options = ["All Statuses", "Applied", "Rejected", "Interview"]
+        self.status_dropdown = CustomDropdown(
+            search_frame, 
+            options=status_options,
+            default="All Statuses",
+            width=130,
+            callback=self._on_status_filter_change
+        )
+        self.status_dropdown.container.pack(side=tk.LEFT)
         
         # Add button
         add_btn = tk.Button(top_frame, text="+ Add Job", command=self.open_add_dialog,
@@ -491,8 +575,8 @@ class JobTrackerApp:
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
-        # Mouse wheel scrolling
-        canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
+        # Mouse wheel scrolling (bind to canvas instead of bind_all)
+        canvas.bind("<MouseWheel>", lambda e: canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
         
         # Initial empty state
         self.update_job_display()
@@ -502,6 +586,15 @@ class JobTrackerApp:
                        borderwidth=1, highlightbackground=self.border_color,
                        highlightthickness=1)
         tile.pack(fill=tk.X, padx=5, pady=5, ipady=10)
+
+        # Handle scrolling when mouse is over this tile
+        def _on_mousewheel(event):
+            # Find the main canvas (parent of self.jobs_frame)
+            # self.jobs_frame is inside the canvas
+            canvas = self.jobs_frame.master
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        
+        tile.bind("<MouseWheel>", _on_mousewheel)
         
         # Delete button in top right
         delete_btn = tk.Button(tile, text="x", command=lambda: self.delete_job(index, job),
@@ -537,7 +630,7 @@ class JobTrackerApp:
                             fg=self.text_secondary, anchor="w")
         date_label.pack(fill=tk.X)
         
-        # View text button
+        # View button (Text or Image)
         if job.get('text_file'):
             view_text_btn = tk.Button(left_frame, text="📄 View Pulled Text", 
                                      command=lambda: self.show_pulled_text(job),
@@ -545,6 +638,13 @@ class JobTrackerApp:
                                      relief=tk.FLAT, cursor="hand2",
                                      activebackground="#2980b9")
             view_text_btn.pack(anchor="w", pady=(5, 0))
+        elif job.get('imageFile'):
+            view_image_btn = tk.Button(left_frame, text="🖼️ View Job Image", 
+                                      command=lambda: self.show_job_image(job),
+                                      bg="#3498db", fg="white", font=("Arial", 9),
+                                      relief=tk.FLAT, cursor="hand2",
+                                      activebackground="#2980b9")
+            view_image_btn.pack(anchor="w", pady=(5, 0))
         
         # Right section - Status and actions
         right_frame = tk.Frame(tile, bg=self.card_bg)
@@ -571,6 +671,15 @@ class JobTrackerApp:
         color = self.status_colors.get(job['status'], "#95a5a6")
         indicator = tk.Frame(right_frame, bg=color, width=80, height=4)
         indicator.pack(fill=tk.X, pady=(5, 0))
+
+        # Bind scroll event to all children except interactive elements
+        def bind_recursive(widget):
+            if not isinstance(widget, (tk.Button, CustomDropdown)):
+                widget.bind("<MouseWheel>", _on_mousewheel)
+            for child in widget.winfo_children():
+                bind_recursive(child)
+        
+        bind_recursive(tile)
     
     def open_update_statuses_window(self):
         if os.path.exists(get_data_path("data/jobs_data.json")):
@@ -590,7 +699,8 @@ class JobTrackerApp:
             on_save=self.add_job_to_list,
             parse_callback=scrapeTextFromUrl,   # your existing Playwright function
             card_bg=self.card_bg,
-            text_primary=self.text_primary
+            text_primary=self.text_primary,
+            text_secondary=self.text_secondary
         )
     
     def show_pulled_text(self, job):
@@ -670,6 +780,135 @@ class JobTrackerApp:
             text_widget.insert('1.0', f"Error loading file: {str(e)}")
             text_widget.config(state='disabled')
     
+    def show_job_image(self, job):
+        """Display the job screenshot in a new window with zoom and scroll"""
+        if not job.get('imageFile'):
+            messagebox.showerror("Error", "No image file associated with this job!")
+            return
+            
+        filepath = get_data_path(os.path.join("data/jobImages", job['imageFile']))
+        if not os.path.exists(filepath):
+            messagebox.showerror("Error", f"Image file not found at: {filepath}")
+            return
+            
+        image_window = tk.Toplevel(self.root)
+        image_window.title(f"Job Image - {job['company']}")
+        image_window.geometry("900x700")
+        image_window.configure(bg=self.card_bg)
+        
+        # Header
+        header_frame = tk.Frame(image_window, bg=self.card_bg)
+        header_frame.pack(fill=tk.X, padx=20, pady=10)
+        
+        tk.Label(header_frame, text=f"{job['company']} - {job['title']}", 
+                font=("Arial", 14, "bold"), bg=self.card_bg,
+                fg=self.text_primary).pack(side=tk.LEFT)
+
+        # Zoom state
+        state = {
+            'zoom_level': 1.0,
+            'auto_fit': True,
+            'pil_image': None,
+            'tk_image': None,
+            'canvas_image_id': None
+        }
+
+        # Zoom controls in header
+        controls_frame = tk.Frame(header_frame, bg=self.card_bg)
+        controls_frame.pack(side=tk.RIGHT)
+
+        def change_zoom(delta):
+            state['auto_fit'] = False
+            state['zoom_level'] *= delta
+            # Limit zoom
+            state['zoom_level'] = max(0.1, min(state['zoom_level'], 5.0))
+            render_image()
+
+        def reset_zoom():
+            state['auto_fit'] = False
+            state['zoom_level'] = 1.0
+            render_image()
+
+        def toggle_fit():
+            state['auto_fit'] = True
+            render_image()
+
+        tk.Button(controls_frame, text="🔍+", command=lambda: change_zoom(1.2),
+                 bg="#3d3d3d", fg="white", relief=tk.FLAT, padx=10).pack(side=tk.LEFT, padx=2)
+        tk.Button(controls_frame, text="🔍-", command=lambda: change_zoom(0.8),
+                 bg="#3d3d3d", fg="white", relief=tk.FLAT, padx=10).pack(side=tk.LEFT, padx=2)
+        tk.Button(controls_frame, text="1:1", command=reset_zoom,
+                 bg="#3d3d3d", fg="white", relief=tk.FLAT, padx=10).pack(side=tk.LEFT, padx=2)
+        tk.Button(controls_frame, text="Fit", command=toggle_fit,
+                 bg="#3d3d3d", fg="white", relief=tk.FLAT, padx=10).pack(side=tk.LEFT, padx=2)
+        
+        # Canvas for display
+        display_frame = tk.Frame(image_window, bg="#1e1e1e")
+        display_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+
+        canvas = tk.Canvas(display_frame, bg="#1e1e1e", highlightthickness=0)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        v_scroll = tk.Scrollbar(display_frame, orient=tk.VERTICAL, command=canvas.yview)
+        v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        h_scroll = tk.Scrollbar(image_window, orient=tk.HORIZONTAL, command=canvas.xview)
+        h_scroll.pack(fill=tk.X, padx=20, pady=(0, 10))
+
+        canvas.configure(yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
+
+        def render_image(event=None):
+            if not state['pil_image']: return
+
+            img_w, img_h = state['pil_image'].size
+            
+            if state['auto_fit']:
+                # Calculate fit ratio
+                canvas_w = canvas.winfo_width()
+                canvas_h = canvas.winfo_height()
+                if canvas_w <= 1: canvas_w = 860 # Fallback
+                if canvas_h <= 1: canvas_h = 580
+                
+                ratio = min(canvas_w / img_w, canvas_h / img_h)
+                state['zoom_level'] = ratio
+            
+            new_w = int(img_w * state['zoom_level'])
+            new_h = int(img_h * state['zoom_level'])
+
+            if new_w > 0 and new_h > 0:
+                resized = state['pil_image'].resize((new_w, new_h), Image.Resampling.LANCZOS)
+                state['tk_image'] = ImageTk.PhotoImage(resized)
+                
+                canvas.delete("all")
+                # Center if smaller than canvas, otherwise start at 0,0
+                canvas_w = canvas.winfo_width()
+                canvas_h = canvas.winfo_height()
+                
+                x = max(0, (canvas_w - new_w) // 2) if new_w < canvas_w else 0
+                y = max(0, (canvas_h - new_h) // 2) if new_h < canvas_h else 0
+                
+                canvas.create_image(x, y, anchor=tk.NW, image=state['tk_image'])
+                canvas.config(scrollregion=(0, 0, new_w + x, new_h + y))
+
+        try:
+            state['pil_image'] = Image.open(filepath)
+            image_window.after(100, render_image)
+            image_window.bind("<Configure>", lambda e: render_image() if e.widget == image_window and state['auto_fit'] else None)
+            
+            # Mouse wheel zoom (Ctrl + Scroll)
+            def mouse_wheel(event):
+                if event.state & 0x0004: # Control key held
+                    if event.delta > 0: change_zoom(1.1)
+                    else: change_zoom(0.9)
+                else:
+                    # Normal scroll
+                    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+            image_window.bind("<MouseWheel>", mouse_wheel)
+
+        except Exception as e:
+            tk.Label(display_frame, text=f"Error loading image: {str(e)}", 
+                    bg="#1e1e1e", fg="#e74c3c").pack(pady=20)
+
     def update_status(self, index, new_status):
         self.jobs[index]['status'] = new_status
         self.save_jobs()
@@ -736,18 +975,38 @@ class JobTrackerApp:
         delete_btn.pack(side=tk.LEFT, padx=5)
         
     def filter_jobs(self):
-        search_term = self.search_var.get().lower()
+        """Wait for 100ms after the last keypress before filtering"""
+        if self.search_timer:
+            self.root.after_cancel(self.search_timer)
         
-        if not search_term:
-            self.filtered_jobs = self.jobs.copy()
-        else:
-            self.filtered_jobs = [
-                job for job in self.jobs 
+        self.search_timer = self.root.after(100, self._perform_filter)
+
+    def _on_status_filter_change(self, new_status):
+        self.status_filter_var.set(new_status)
+        self.filter_jobs()
+
+    def _perform_filter(self):
+        """Actually execute the filtering logic"""
+        search_term = self.search_var.get().lower()
+        selected_status = self.status_filter_var.get()
+        
+        # Start with all jobs
+        filtered = self.jobs.copy()
+        
+        # Apply Status filter
+        if selected_status != "All Statuses":
+            filtered = [job for job in filtered if job['status'] == selected_status]
+            
+        # Apply Search filter
+        if search_term:
+            filtered = [
+                job for job in filtered 
                 if search_term in job['company'].lower() or 
                    search_term in job['title'].lower() or
                    search_term in job['status'].lower()
             ]
         
+        self.filtered_jobs = filtered
         self.update_job_display()
         
     def update_job_display(self):
@@ -756,8 +1015,13 @@ class JobTrackerApp:
             widget.destroy()
         
         # Determine which jobs to display
-        display_jobs = self.filtered_jobs if hasattr(self, 'filtered_jobs') and self.search_var.get() else self.jobs
+        is_filtering = bool(self.search_var.get()) or self.status_filter_var.get() != "All Statuses"
+        display_jobs = self.filtered_jobs if hasattr(self, 'filtered_jobs') and is_filtering else self.jobs
         
+        # Update job count label
+        count_text = f"Found {len(display_jobs)} jobs" if is_filtering else f"Total Jobs: {len(display_jobs)}"
+        self.job_count_label.config(text=count_text)
+
         if not display_jobs:
             # Show empty state
             empty_label = tk.Label(self.jobs_frame, 
@@ -835,7 +1099,7 @@ class UpdateJobStatusesWindow:
     def _create_window(self):
         self.win = tk.Toplevel(self.root)
         self.win.title("Update Job Statuses")
-        self.win.geometry("600x420")
+        self.win.geometry("600x480")
         self.win.configure(bg=self.card_bg)
 
         self.win.transient(self.root)
@@ -1064,9 +1328,77 @@ class UpdateJobStatusesWindow:
         self.embedBtn.pack(pady=(0, 12))
         self.disable_embed_button()
 
+        self.logsBtn = tk.Button(
+            self.win,
+            text="View Logs",
+            command=self.show_logs_window,
+            bg="#95a5a6",
+            fg="white",
+            font=("Arial", 11, "bold"),
+            relief=tk.FLAT,
+            cursor="hand2",
+            padx=16,
+            pady=8,
+            activebackground="#7f8c8d"
+        )
+        self.logsBtn.pack(pady=(0, 12))
+
         self.win.update_idletasks()
 
         threading.Thread(target=self.createActionButtonThread, daemon=True).start()
+
+    def show_logs_window(self):
+        """Display the content of data/logs.json in a new window"""
+        logs_path = get_data_path("data/logs.json")
+        
+        logs_window = tk.Toplevel(self.win)
+        logs_window.title("Jobs Updated Logs")
+        logs_window.geometry("700x500")
+        logs_window.configure(bg=self.card_bg)
+        logs_window.transient(self.win)
+        
+        tk.Label(logs_window, text="Jobs Updated From Emails", font=("Arial", 14, "bold"),
+                bg=self.card_bg, fg=self.text_primary).pack(pady=15)
+        
+        text_frame = tk.Frame(logs_window, bg=self.card_bg)
+        text_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+        
+        scrollbar = tk.Scrollbar(text_frame)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        log_display = tk.Text(text_frame, wrap=tk.WORD, bg="#3d3d3d", 
+                             fg=self.text_primary, font=("Consolas", 10),
+                             yscrollcommand=scrollbar.set, relief=tk.FLAT,
+                             padx=10, pady=10)
+        log_display.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=log_display.yview)
+        
+        try:
+            if os.path.exists(logs_path):
+                with open(logs_path, 'r', encoding='utf-8') as f:
+                    logs_data = json.load(f)
+                
+                content = []
+                
+                # Format Jobs Updated
+                jobs_updated = logs_data.get("JobsUpdated", [])
+                if not jobs_updated:
+                    content.append("No jobs updated yet.")
+                else:
+                    # Reverse list to show most recent at the top
+                    for job in reversed(jobs_updated):
+                        company = job.get("company", "Unknown Company")
+                        title = job.get("title", "Unknown Title")
+                        j_type = job.get("type", "Unknown Type")
+                        content.append(f"• {company} - {title}: {j_type}")
+                
+                log_display.insert("1.0", "\n".join(content))
+            else:
+                log_display.insert("1.0", "Log file (logs.json) not found yet.")
+        except Exception as e:
+            log_display.insert("1.0", f"Error reading logs: {str(e)}")
+            
+        log_display.config(state="disabled")
 
     def createActionButtonThread(self):
         backgroundColor = None
