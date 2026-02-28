@@ -40,7 +40,6 @@ If you are using the pre-compiled version, follow these steps to set up the envi
    ```bash
    python -m playwright install
    ```
-6. **Get Email App Credentials**
 
 **Important**: TrajectTower currently uses **Playwright v1.57**. Using different versions may cause compatibility issues with the parsing engine.
 
