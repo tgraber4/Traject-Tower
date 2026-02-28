@@ -1,77 +1,85 @@
-# TrajectTower 🗼
+# TrajectTower
 
-TrajectTower is a comprehensive, desktop-based Job Application Tracker designed to streamline the job hunt process. It combines manual tracking with automated features like URL parsing and email-based status updates.
+![TrajectTower Logo](resources/logo.png)
 
-## 🚀 Features
+(Place demo video here)
 
-### 📋 Job Management
-- **URL Parser**: Automatically pull job descriptions from URLs using Playwright.
-- **Manual Entry**: Paste job descriptions directly or upload screenshots for visual tracking.
-- **Status Tracking**: Categorize your applications as **Applied**, **Rejected**, or **Interview**.
-- **Search & Filter**: 
-  - Real-time search by Company, Title, or Status.
-  - Status-specific filtering (e.g., view only your current interviews).
-  - 100ms debounced search for smooth performance.
-
-### 🖼️ Enhanced Media Viewing
-- **Zoomable Image Viewer**: View job screenshots with full Zoom In/Out, 1:1, and Auto-Fit controls.
-- **Smooth Navigation**: Support for mouse-wheel scrolling and Ctrl+Scroll for zooming.
-- **Independent Windows**: Multiple windows can be open without conflicting scroll behaviors.
-
-### 📧 Automated Updates
-- **Gmail Integration**: Connect your Gmail account to automatically update application statuses based on labels.
-- **Label-Based Processing**: Use labels like `Internship-Interview` or `Internship-Rejected` to trigger updates.
-- **Process Logs**: View a historical log of all automated status changes, ordered from most recent to oldest.
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-- Python 3.8+
-- [Pillow](https://python-pillow.org/) for image processing
-- [Playwright](https://playwright.dev/python/) for web scraping
-- [Google API Client](https://github.com/googleapis/google-api-python-client) for Gmail integration
-
-### Step-by-Step Setup
-
-1. **Clone and Create Virtual Environment**:
-   ```bash
-   python -m venv venv
-   # Windows:
-   .\venv\Scripts\activate
-   # Mac/Linux:
-   source venv/bin/activate
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Install Playwright Browsers**:
-   ```bash
-   playwright install chromium
-   ```
-
-4. **Run the Application**:
-   ```bash
-   python main.py
-   ```
-
-## 📂 Project Structure
-
-- `main.py`: The primary GUI and application logic.
-- `app/`: 
-  - `parse.py`: Logic for scraping job descriptions.
-  - `embed.py`: Logic for handling logs and data embedding.
-  - `paths.py`: Cross-platform path management.
-  - `emails/`: Email provider integrations (Gmail, etc.).
-- `data/`: Local storage for job data, images, and text files (stored in `%APPDATA%` on Windows).
-
-## 🛡️ Data & Privacy
-TrajectTower stores all data locally on your machine.
-- **Images**: Moved to `data/jobImages` for persistent storage.
-- **Descriptions**: Saved as text files in `data/pulledTextFiles`.
-- **Logs**: Automated changes are tracked in `data/logs.json`.
+## Description
+TrajectTower is a simplified job application tracker designed to help job seekers manage their applications effortlessly. It allows users to:
+- **Save Job Listings**: Capture and store job descriptions for future reference.
+- **Import Updated Statuses**: Automatically sync and update your application status from your email.
+- **Support for Multiple Formats**: Add jobs manually, pull data from a URL via automated parsing, or even upload screenshots of job postings.
+- **Track Application Stages**: Easily categorize applications into *Applied*, *Rejected*, or *Interview* stages.
 
 ---
-*Built with ❤️ for job hunters.*
+
+## Installation and Setup (EXE)
+If you are using the pre-compiled version, follow these steps to set up the environment for job parsing (scraping).
+*Note: This application has only been tested on Windows devices.*
+
+1. **Download the EXE**: Get the latest version from the [Releases](https://github.com/your-username/TrajectTower/releases) tab.
+2. **Install Playwright**: Open your terminal and run:
+   ```bash
+   pip install playwright
+   ```
+3. **Get Browsers Path**: Run `getPath.py` to identify where Playwright browsers should be installed on your machine.
+   ```bash
+   python getPath.py
+   ```
+   *Copy the path provided in the output.*
+4. **Set Environment Variable**:
+   - **Windows (PowerShell)**: 
+     ```powershell
+     $env:PLAYWRIGHT_BROWSERS_PATH = "(paste path here)"
+     ```
+   - **Mac (zsh/bash)**: 
+     ```bash
+     export PLAYWRIGHT_BROWSERS_PATH="(paste path here)"
+     ```
+5. **Install Playwright Browsers**:
+   ```bash
+   python -m playwright install
+   ```
+6. **Get Email App Credentials**
+
+**Important**: TrajectTower currently uses **Playwright v1.57**. Using different versions may cause compatibility issues with the parsing engine.
+
+---
+
+## Setup Development Environment
+If you wish to run the project from source or contribute, follow these steps:
+
+1. **Create a Virtual Environment**:
+   - **Windows**: `python -m venv venv`
+   - **Mac/Linux**: `python3 -m venv venv`
+
+2. **Activate the Environment**:
+   - **Windows**: `.\venv\Scripts\activate`
+   - **Mac/Linux**: `source venv/bin/activate`
+
+3. **Install Dependencies**:
+   Refer to `requirements.txt` for detailed installation steps.
+   
+4. **Get Email App Credentials**
+
+---
+
+## Rebuild Executable
+To create a standalone executable, ensure you have PyInstaller installed and run the corresponding command for your OS:
+
+- **Windows**:
+  ```bash
+  pyinstaller --onefile --add-data "resources;resources" --add-data "data;data" --icon="resources/logo.ico" main.py --name TrajectTower
+  ```
+- **Mac/Linux**:
+  ```bash
+  pyinstaller --onefile --add-data "resources:resources" --add-data "data:data" main.py --name TrajectTower
+  ```
+
+---
+
+
+## Data & Privacy
+TrajectTower is built with a **privacy-first approach**. 
+- All application data is stored **locally on your machine**.
+- Email connections (e.g., Gmail) are limited strictly to accessing specific labels (`Internship-Interview`, `Internship-Rejected`) to update job statuses. No other email data is accessed or stored.
