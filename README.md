@@ -1,14 +1,14 @@
 # TrajectTower
 
-![TrajectTower Logo](resources/logo.png)
+<img width="1459" height="1048" alt="Screenshot 2026-03-01 201648" src="https://github.com/user-attachments/assets/77fc130d-aaed-48e5-99f4-37f6bf235827" />
 
-(Place demo video here)
+
+Demo Video: Coming Soon!
 
 ## Description
 TrajectTower is a simplified job application tracker designed to help job seekers manage their applications effortlessly. It allows users to:
-- **Save Job Listings**: Capture and store job descriptions for future reference.
-- **Import Updated Statuses**: Automatically sync and update your application status from your email.
-- **Support for Multiple Formats**: Add jobs manually, pull data from a URL via automated parsing, or even upload screenshots of job postings.
+- **Save Job Listings**: Capture and store job descriptions for future reference. (even when the job posting goes down!)
+- **Import Job Updates from Email**: Automatically sync and update your application status from your email.
 - **Track Application Stages**: Easily categorize applications into *Applied*, *Rejected*, or *Interview* stages.
 
 ---
@@ -82,3 +82,10 @@ To create a standalone executable, ensure you have PyInstaller installed and run
 TrajectTower is built with a **privacy-first approach**. 
 - All application data is stored **locally on your machine**.
 - Email connections (e.g., Gmail) are limited strictly to accessing specific labels (`Internship-Interview`, `Internship-Rejected`) to update job statuses. No other email data is accessed or stored.
+
+---
+
+## Future Support
+Outlook and iCloud Mail coming in the future. <br>
+Support for an installer, which will make setup extremely easy, coming in the future. <br>
+Improved email processing coming in future. 
